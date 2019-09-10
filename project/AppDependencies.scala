@@ -1,15 +1,14 @@
 import play.core.PlayVersion.current
-import play.sbt.PlayImport._
-import sbt.Keys.libraryDependencies
 import sbt._
 
 object AppDependencies {
 
   val compile = Seq(
 
-    "uk.gov.hmrc"             %% "govuk-template"           % "5.38.0-play-26",
-    "uk.gov.hmrc"             %% "play-ui"                  % "8.0.0-play-26",
-    "uk.gov.hmrc"             %% "bootstrap-play-26"        % "0.46.0"
+    "uk.gov.hmrc" %% "play-health"                   % "3.9.0-play-26",
+    "uk.gov.hmrc" %% "bootstrap-play-26"             % "0.33.0",
+    "uk.gov.hmrc" %% "play-ui"                       % "7.27.0-play-26",
+    "uk.gov.hmrc" %% "play-frontend-govuk"           % "0.1.0-play-26-SNAPSHOT"
   )
 
   val test = Seq(
