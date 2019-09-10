@@ -25,9 +25,11 @@ import uk.gov.hmrc.playprototypefrontend.views.html._
 import scala.concurrent.Future
 
 @Singleton
-class PersonalDetailsAccountController @Inject()(personalDetailsStart: PersonalDetailsAccount,
-                                                 appConfig: AppConfig,
-                                                 mcc: MessagesControllerComponents) extends FrontendController(mcc) {
+class PersonalDetailsAccountController @Inject()(
+  personalDetailsStart: PersonalDetailsAccount,
+  appConfig: AppConfig,
+  mcc: MessagesControllerComponents
+) extends FrontendController(mcc) {
 
   implicit val config: AppConfig = appConfig
 
