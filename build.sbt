@@ -1,7 +1,6 @@
 import play.sbt.routes.RoutesKeys
 import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 import uk.gov.hmrc.{DefaultBuildSettings, SbtArtifactory}
-import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin.publishingSettings
 
 val appName = "play-prototype-frontend"
 
@@ -12,12 +11,12 @@ lazy val microservice = Project(appName, file("."))
   .settings(SbtDistributablesPlugin.publishingSettings: _*)
   .settings(playSettings: _*)
   .settings(
-    majorVersion                     := 0,
+    majorVersion := 0,
     scalacOptions ++= Seq(
       "-feature",
       "-deprecation"
     ),
-    libraryDependencies              ++= AppDependencies.compile ++ AppDependencies.test
+    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test
   )
   .configs(IntegrationTest)
   .settings(integrationTestSettings(): _*)
@@ -27,23 +26,19 @@ lazy val microservice = Project(appName, file("."))
   ))
 
 lazy val playSettings = Seq(
-//  PlayKeys.playDefaultPort  := 8067,
-  RoutesKeys.routesImport   += "models._",
+  //  PlayKeys.playDefaultPort  := 8067,
+  RoutesKeys.routesImport += "models._",
   TwirlKeys.templateImports ++= Seq(
     "play.twirl.api.HtmlFormat",
     "play.twirl.api.HtmlFormat._"
   ),
   Concat.groups := Seq(
-//    "javascripts/importexporteligibilityfrontend-app.js" -> group(
-//      Seq("javascripts/details-polyfill.js", "javascripts/show-hide-content.js", "javascripts/importexporteligibilityfrontend.js"))
-//    ,
-       "javascripts/application.js" -> group(Seq("lib/govuk-frontend/all.js"))
+    "javascripts/application.js" -> group(Seq("lib/govuk-frontend/all.js"))
   ),
   uglifyCompressOptions := Seq(
-    "unused=false", "dead_code=false"
+    "unused=false",
+    "dead_code=false"
   ),
   pipelineStages := Seq(digest),
   pipelineStages in Assets := Seq(concat, uglify)
-//  ,
-//  includeFilter in uglify := GlobFilter("importexporteligibilityfrontend-*.js")
 )
