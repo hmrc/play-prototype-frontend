@@ -20,8 +20,8 @@
       submit: Button)
 @()(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some("Personal Details Account")) {
-    <h1 class="govuk-heading-xl">Personal Details Account</h1>
+@layout(pageTitle = Some(messages("start.title"))) {
+    <h1 class="govuk-heading-xl">@messages("start.title")</h1>
 
     <p class="govuk-body">Use this service to:</p>
 
@@ -33,5 +33,5 @@
 
     <p class="govuk-body">Registering takes around 1 minute.</p>
 
-    @submit()(content = Text(messages("Start now")))
+    @submit()(content = Text(messages("site.start")))
 }
