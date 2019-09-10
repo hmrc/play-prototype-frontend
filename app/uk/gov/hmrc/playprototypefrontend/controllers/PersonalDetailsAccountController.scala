@@ -27,6 +27,7 @@ import scala.concurrent.Future
 @Singleton
 class PersonalDetailsAccountController @Inject()(
   personalDetailsStart: PersonalDetailsAccount,
+  name: Name,
   appConfig: AppConfig,
   mcc: MessagesControllerComponents
 ) extends FrontendController(mcc) {
@@ -35,6 +36,10 @@ class PersonalDetailsAccountController @Inject()(
 
   val startPage: Action[AnyContent] = Action.async { implicit request =>
     Future.successful(Ok(personalDetailsStart()))
+  }
+
+  val namePage: Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok(name()))
   }
 
 }

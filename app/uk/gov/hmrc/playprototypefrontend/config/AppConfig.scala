@@ -25,7 +25,7 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
 
   private val contactBaseUrl = servicesConfig.baseUrl("contact-frontend")
 
-  private val serviceIdentifier = "Play-Prototype-Frontend"
+  private val serviceIdentifier = "play-prototype-frontend"
 
   val analyticsToken: String = config.get[String](s"google-analytics.token")
   val analyticsHost: String  = config.get[String](s"google-analytics.host")

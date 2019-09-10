@@ -1,24 +1,30 @@
-start.title = Personal Details Account
-start.heading = play-prototype-frontend
+start.title = Personal details
+start.heading = Personal Details Account
+
+name.title = Your name – Personal details
+name.heading = Your name
+name.section = Personal details
+name.input = What is your name?
 
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset
 session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.
 
 site.back = Back
+site.continue = Continue
 site.delete = Remove
 site.edit = Change
 site.hidden-delete = Delete {0}
 site.hidden-edit = Change {0}
 site.no = No
 site.yes = Yes
-site.continue = Continue
-site.service_name = Check if you need to register for import VAT on parcels
-site.textarea.char_limit = (Limit is {0} characters)
-site.startAgain = Start again
 site.exitToGov = Exit to GOV.UK
+site.service_name = Personal Details Account – GOV.UK
+site.saveAndContinue = Save and continue
 site.start = Start Now
+site.startAgain = Start again
 site.submit = Submit
+site.textarea.char_limit = (Limit is {0} characters)
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account

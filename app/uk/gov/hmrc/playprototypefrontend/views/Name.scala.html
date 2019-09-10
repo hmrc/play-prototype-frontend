@@ -15,25 +15,26 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components._
+@import uk.gov.hmrc.govukfrontend.views.html.helpers._
 @import uk.gov.hmrc.playprototypefrontend.controllers.routes._
 
 @this(layout: Layout,
-      submit: Button)
+        form: FormWithCSRF,
+        input: Input,
+        submit: Button)
 @()(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some(messages("start.title") + " – " + messages("site.service_name"))) {
+@layout(pageTitle = Some(messages("name.title") + " – " + messages("site.service_name"))) {
 
-        <h1 class="govuk-heading-xl">@messages("start.heading")</h1>
+    @form(action = PersonalDetailsAccountController.startPage()) {
+        <header class="hmrc-page-heading">
+            <p class="govuk-caption-xl hmrc-caption-xl"><span class="govuk-visually-hidden">
+                This section is </span>@messages("name.section")</p>
+            <h1 class="govuk-heading-xl">@messages("name.heading")</h1>
+        </header>
 
-        <p class="govuk-body">Use this service to:</p>
+        @input(id = "name", name = "name", labelParams = LabelParams(content = Text(messages("name.input"))), classes = "govuk-!-width-two-thirds")
 
-        <ul class="govuk-list govuk-list--bullet">
-            <li>enter your personal details</li>
-            <li>be told they’ve been saved even though they haven’t</li>
-            <li>try out different ways of creating services</li>
-        </ul>
-
-        <p class="govuk-body">Registering takes around 1 minute.</p>
-
-        @submit(href = Some(PersonalDetailsAccountController.namePage().url))(content = Text(messages("site.start")))
+        @submit()(content = Text(messages("site.saveAndContinue")))
+    }
 }
