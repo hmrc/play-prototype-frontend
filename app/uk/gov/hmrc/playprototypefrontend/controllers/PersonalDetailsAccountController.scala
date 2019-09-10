@@ -25,13 +25,13 @@ import uk.gov.hmrc.playprototypefrontend.views.html._
 import scala.concurrent.Future
 
 @Singleton
-class HelloWorldController @Inject()(personalDetailsStart: PersonalDetailsAccount,
-                                     appConfig: AppConfig,
-                                     mcc: MessagesControllerComponents) extends FrontendController(mcc) {
+class PersonalDetailsAccountController @Inject()(personalDetailsStart: PersonalDetailsAccount,
+                                                 appConfig: AppConfig,
+                                                 mcc: MessagesControllerComponents) extends FrontendController(mcc) {
 
   implicit val config: AppConfig = appConfig
 
-  val helloWorld: Action[AnyContent] = Action.async { implicit request =>
+  val startPage: Action[AnyContent] = Action.async { implicit request =>
     Future.successful(Ok(personalDetailsStart()))
   }
 
