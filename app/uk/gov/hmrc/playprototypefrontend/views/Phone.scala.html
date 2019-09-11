@@ -27,7 +27,7 @@
 
 @layout(pageTitle = Some(messages("phone.title") + " – " + messages("site.service_name"))) {
 
-    @form(action = PersonalDetailsAccountController.startPage()) {
+    @form(action = PersonalDetailsAccountController.acceptPhone()) {
         <header class="hmrc-page-heading">
             <p class="govuk-caption-xl hmrc-caption-xl"><span class="govuk-visually-hidden">
                 This section is </span>@messages("phone.section")</p>
@@ -36,6 +36,7 @@
 
         @input(id = "phone-number",
             name = "phone-number",
+            value = Some(personalDetails.value.getOrElse(PersonalDetails()).phone.phoneNumber),
             labelParams = LabelParams(content = Text(messages("phone.input"))),
             classes = "govuk-!-width-two-thirds")
 

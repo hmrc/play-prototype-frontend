@@ -17,19 +17,21 @@
 package uk.gov.hmrc.playprototypefrontend.controllers
 
 import javax.inject.{Inject, Singleton}
+import play.api.libs.json._
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.playprototypefrontend.config.AppConfig
-import uk.gov.hmrc.playprototypefrontend.model.{nameForm, phoneForm, personalDetailsForm}
+import uk.gov.hmrc.playprototypefrontend.model.{PersonalDetails, nameForm, personalDetailsForm, personalDetailsFormat, phoneForm}
 import uk.gov.hmrc.playprototypefrontend.views.html._
 
 import scala.concurrent.Future
+import scala.language.implicitConversions
 
 @Singleton
 class PersonalDetailsAccountController @Inject()(
                                                   personalDetailsStart: PersonalDetailsAccount,
-                                                  name: Name,
-                                                  phone: Phone,
+                                                  nameView: Name,
+                                                  phoneView: Phone,
                                                   appConfig: AppConfig,
                                                   mcc: MessagesControllerComponents
                                                 ) extends FrontendController(mcc) {
@@ -41,30 +43,35 @@ class PersonalDetailsAccountController @Inject()(
   }
 
   val namePage: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(name(personalDetailsForm)))
+    Future.successful(Ok(nameView(personalDetailsForm)))
   }
 
   val acceptName: Action[AnyContent] = Action.async { implicit request =>
     nameForm.bindFromRequest.fold(
       formWithErrors => {
-        Future.successful(BadRequest(name(formWithErrors)))
+        Future.successful(BadRequest(nameView(formWithErrors)))
       },
       personalDetails => {
-        Future.successful(Ok(phone(personalDetailsForm)))
+        Future.successful(Ok(phoneView(nameForm)).addingToSession("personalDetails" -> Json.toJson(personalDetails).toString()))
       }
     )
   }
 
   val phonePage: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(phone(personalDetailsForm)))
+    Future.successful(Ok(phoneView(personalDetailsForm)))
   }
 
   val acceptPhone: Action[AnyContent] = Action.async { implicit request =>
     phoneForm.bindFromRequest.fold(
       formWithErrors => {
-        Future.successful(BadRequest(phone(formWithErrors)))
+        Future.successful(BadRequest(phoneView(formWithErrors)))
       },
       personalDetails => {
+        val storedPersonalDetails = request.session.get("personalDetails").map(Json.parse).map(Json.fromJson[PersonalDetails]).map(_.get)
+        val result = storedPersonalDetails match {
+          case Some(pda) => pda.copy(name = pda.name, phone = personalDetails.phone)
+          case _ => personalDetails
+        }
         Future.successful(Ok(personalDetailsStart()))
       }
     )
