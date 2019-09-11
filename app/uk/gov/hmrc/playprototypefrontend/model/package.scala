@@ -28,8 +28,7 @@ package object model {
   case class PhoneNumber(phoneNumber: String)
 
   case class PersonalDetails(name: Name = Name(""),
-                             phone: PhoneNumber = PhoneNumber(""),
-                             csrfToken: String = "")
+                             phone: PhoneNumber = PhoneNumber(""))
 
   implicit val optionStringFormat = play.api.libs.json.Format.optionWithNull[String]
 
@@ -41,38 +40,35 @@ package object model {
 
   val nameForm = Form[PersonalDetails](
     mapping(
-      "name" -> nonEmptyText.verifying(pattern(regex = """\D+""".r, error = "name.inputInvalid", name = "")),
-      "csrfToken" -> nonEmptyText
+      "name" -> nonEmptyText.verifying(pattern(regex = """\D+""".r, error = "name.inputInvalid", name = ""))
     )(
-      (a, b) => PersonalDetails(name = Name(a), csrfToken = b)
+      a => PersonalDetails(name = Name(a))
     )(
       personalDetails =>
-        Some(personalDetails.name.name, personalDetails.csrfToken)
+        Some(personalDetails.name.name)
     )
   )
 
   val phoneForm = Form[PersonalDetails](
     mapping(
-      "phone-number" -> nonEmptyText.verifying(pattern(regex = """\d+""".r, error = "phone.inputInvalid", name = "")),
-      "csrfToken" -> nonEmptyText
+      "phone-number" -> nonEmptyText.verifying(pattern(regex = """\d+""".r, error = "phone.inputInvalid", name = ""))
     )(
-      (a, b) => PersonalDetails(name = Name(a), csrfToken = b)
+      a => PersonalDetails(phone = PhoneNumber(a))
     )(
       personalDetails =>
-        Some(personalDetails.name.name, personalDetails.csrfToken)
+        Some(personalDetails.phone.phoneNumber)
     )
   )
 
   val personalDetailsForm = Form[PersonalDetails](
     mapping(
       "name" -> text.verifying(pattern(regex = """\D+""".r, error = "name.inputInvalid", name = "")),
-      "phone-number" -> nonEmptyText.verifying(pattern(regex = """\d+""".r, error = "phone.inputInvalid", name = "")),
-      "csrfToken" -> nonEmptyText
+      "phone-number" -> nonEmptyText.verifying(pattern(regex = """\d+""".r, error = "phone.inputInvalid", name = ""))
     )(
-      (a, b, c) => PersonalDetails(Name(a), PhoneNumber(b), c)
+      (a, b) => PersonalDetails(Name(a), PhoneNumber(b))
     )(
       personalDetails =>
-        Some(personalDetails.name.name, personalDetails.phone.phoneNumber, personalDetails.csrfToken)
+        Some(personalDetails.name.name, personalDetails.phone.phoneNumber)
     )
   )
 
