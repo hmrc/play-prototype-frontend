@@ -21,20 +21,30 @@ import play.api.data.Forms._
 import play.api.data.validation.Constraints._
 import play.api.libs.json.Json
 
+import scala.collection.immutable.Stream.Empty
+
 package object model {
 
   case class Name(name: String)
 
   case class PhoneNumber(phoneNumber: String)
 
+  case class Address(lines: Seq[String] = Empty) {
+
+    def asText = lines mkString ("\n")
+  }
+
   case class PersonalDetails(name: Name = Name(""),
-                             phone: PhoneNumber = PhoneNumber(""))
+                             phone: PhoneNumber = PhoneNumber(""),
+                             address: Address = Address())
 
   implicit val optionStringFormat = play.api.libs.json.Format.optionWithNull[String]
 
   implicit val nameFormat = Json.format[Name]
 
   implicit val phoneFormat = Json.format[PhoneNumber]
+
+  implicit val addressFormat = Json.format[Address]
 
   implicit val personalDetailsFormat = Json.format[PersonalDetails]
 
@@ -60,15 +70,27 @@ package object model {
     )
   )
 
+  val addressForm = Form[PersonalDetails](
+    mapping(
+      "address" -> nonEmptyText.verifying(pattern(regex = """(\w|\s)+""".r, error = "address.inputInvalid", name = ""))
+    )(
+      a => PersonalDetails(address = Address(a.split("\r\n")))
+    )(
+      personalDetails =>
+        Some(personalDetails.address.asText)
+    )
+  )
+
   val personalDetailsForm = Form[PersonalDetails](
     mapping(
       "name" -> text.verifying(pattern(regex = """\D+""".r, error = "name.inputInvalid", name = "")),
-      "phone-number" -> nonEmptyText.verifying(pattern(regex = """\d+""".r, error = "phone.inputInvalid", name = ""))
+      "phone-number" -> nonEmptyText.verifying(pattern(regex = """\d+""".r, error = "phone.inputInvalid", name = "")),
+      "address" -> nonEmptyText.verifying(pattern(regex = """(\w|\s)+""".r, error = "address.inputInvalid", name = ""))
     )(
-      (a, b) => PersonalDetails(Name(a), PhoneNumber(b))
+      (a, b, c) => PersonalDetails(Name(a), PhoneNumber(b), Address(c.split("\r\n")))
     )(
       personalDetails =>
-        Some(personalDetails.name.name, personalDetails.phone.phoneNumber)
+        Some(personalDetails.name.name, personalDetails.phone.phoneNumber, personalDetails.address.asText)
     )
   )
 

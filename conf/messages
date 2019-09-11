@@ -10,8 +10,14 @@ name.inputInvalid = Name invalid
 phone.title = Your phone number – Personal details
 phone.heading = Your phone number
 phone.section = Personal details
-phone.input = What is your name?
+phone.input = What is your phone number?
 phone.inputInvalid = Phone number invalid
+
+address.title = Your address – Personal details
+address.heading = Your address
+address.section = Personal details
+address.input = What is your address?
+address.inputInvalid = Address invalid
 
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset

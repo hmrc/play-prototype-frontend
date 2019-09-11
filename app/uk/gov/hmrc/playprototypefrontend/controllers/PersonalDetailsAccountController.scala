@@ -21,7 +21,7 @@ import play.api.libs.json._
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.playprototypefrontend.config.AppConfig
-import uk.gov.hmrc.playprototypefrontend.model.{PersonalDetails, nameForm, personalDetailsForm, personalDetailsFormat, phoneForm}
+import uk.gov.hmrc.playprototypefrontend.model.{PersonalDetails, addressForm, nameForm, personalDetailsForm, personalDetailsFormat, phoneForm}
 import uk.gov.hmrc.playprototypefrontend.views.html._
 
 import scala.concurrent.Future
@@ -32,6 +32,7 @@ class PersonalDetailsAccountController @Inject()(
                                                   personalDetailsStart: PersonalDetailsAccount,
                                                   nameView: Name,
                                                   phoneView: Phone,
+                                                  addressView: Address,
                                                   appConfig: AppConfig,
                                                   mcc: MessagesControllerComponents
                                                 ) extends FrontendController(mcc) {
@@ -39,14 +40,17 @@ class PersonalDetailsAccountController @Inject()(
   implicit val config: AppConfig = appConfig
 
   val startPage: Action[AnyContent] = Action.async { implicit request =>
+
     Future.successful(Ok(personalDetailsStart()))
   }
 
   val namePage: Action[AnyContent] = Action.async { implicit request =>
+
     Future.successful(Ok(nameView(personalDetailsForm)))
   }
 
   val acceptName: Action[AnyContent] = Action.async { implicit request =>
+
     nameForm.bindFromRequest.fold(
       formWithErrors => {
         Future.successful(BadRequest(nameView(formWithErrors)))
@@ -58,10 +62,12 @@ class PersonalDetailsAccountController @Inject()(
   }
 
   val phonePage: Action[AnyContent] = Action.async { implicit request =>
+
     Future.successful(Ok(phoneView(personalDetailsForm)))
   }
 
   val acceptPhone: Action[AnyContent] = Action.async { implicit request =>
+
     phoneForm.bindFromRequest.fold(
       formWithErrors => {
         Future.successful(BadRequest(phoneView(formWithErrors)))
@@ -72,7 +78,29 @@ class PersonalDetailsAccountController @Inject()(
           case Some(pda) => pda.copy(name = pda.name, phone = personalDetails.phone)
           case _ => personalDetails
         }
-        Future.successful(Ok(personalDetailsStart()))
+        Future.successful(Ok(addressView(phoneForm)).addingToSession("personalDetails" -> Json.toJson(result).toString()))
+      }
+    )
+  }
+
+  val addressPage: Action[AnyContent] = Action.async { implicit request =>
+
+    Future.successful(Ok(addressView(personalDetailsForm)))
+  }
+
+  val acceptAddress: Action[AnyContent] = Action.async { implicit request =>
+
+    addressForm.bindFromRequest.fold(
+      formWithErrors => {
+        Future.successful(BadRequest(addressView(formWithErrors)))
+      },
+      personalDetails => {
+        val storedPersonalDetails = request.session.get("personalDetails").map(Json.parse).map(Json.fromJson[PersonalDetails]).map(_.get)
+        val result = storedPersonalDetails match {
+          case Some(pda) => pda.copy(name = pda.name, phone = pda.phone, address = personalDetails.address)
+          case _ => personalDetails
+        }
+        Future.successful(Ok(addressView(phoneForm)).addingToSession("personalDetails" -> Json.toJson(result).toString()))
       }
     )
   }
