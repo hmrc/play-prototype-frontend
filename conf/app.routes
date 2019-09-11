@@ -4,5 +4,9 @@
 GET        /                                uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.startPage
 
 GET        /name                            uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.namePage
+POST       /name                            uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.acceptName
+
+GET        /phone                           uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.phonePage
+POST       /phone                           uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.acceptPhone
 
 GET        /assets/*file                    controllers.Assets.versioned(path="/public", file: Asset)

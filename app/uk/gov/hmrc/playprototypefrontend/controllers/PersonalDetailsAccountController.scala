@@ -20,17 +20,19 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.playprototypefrontend.config.AppConfig
+import uk.gov.hmrc.playprototypefrontend.model.{nameForm, phoneForm, personalDetailsForm}
 import uk.gov.hmrc.playprototypefrontend.views.html._
 
 import scala.concurrent.Future
 
 @Singleton
 class PersonalDetailsAccountController @Inject()(
-  personalDetailsStart: PersonalDetailsAccount,
-  name: Name,
-  appConfig: AppConfig,
-  mcc: MessagesControllerComponents
-) extends FrontendController(mcc) {
+                                                  personalDetailsStart: PersonalDetailsAccount,
+                                                  name: Name,
+                                                  phone: Phone,
+                                                  appConfig: AppConfig,
+                                                  mcc: MessagesControllerComponents
+                                                ) extends FrontendController(mcc) {
 
   implicit val config: AppConfig = appConfig
 
@@ -39,7 +41,33 @@ class PersonalDetailsAccountController @Inject()(
   }
 
   val namePage: Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok(name()))
+    Future.successful(Ok(name(personalDetailsForm)))
+  }
+
+  val acceptName: Action[AnyContent] = Action.async { implicit request =>
+    nameForm.bindFromRequest.fold(
+      formWithErrors => {
+        Future.successful(BadRequest(name(formWithErrors)))
+      },
+      personalDetails => {
+        Future.successful(Ok(phone(personalDetailsForm)))
+      }
+    )
+  }
+
+  val phonePage: Action[AnyContent] = Action.async { implicit request =>
+    Future.successful(Ok(phone(personalDetailsForm)))
+  }
+
+  val acceptPhone: Action[AnyContent] = Action.async { implicit request =>
+    phoneForm.bindFromRequest.fold(
+      formWithErrors => {
+        Future.successful(BadRequest(phone(formWithErrors)))
+      },
+      personalDetails => {
+        Future.successful(Ok(personalDetailsStart()))
+      }
+    )
   }
 
 }

@@ -5,6 +5,13 @@ name.title = Your name – Personal details
 name.heading = Your name
 name.section = Personal details
 name.input = What is your name?
+name.inputInvalid = Name invalid
+
+phone.title = Your phone number – Personal details
+phone.heading = Your phone number
+phone.section = Personal details
+phone.input = What is your name?
+phone.inputInvalid = Phone number invalid
 
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset

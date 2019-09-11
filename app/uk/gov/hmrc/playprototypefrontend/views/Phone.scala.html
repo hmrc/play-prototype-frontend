@@ -23,22 +23,20 @@
         form: FormWithCSRF,
         input: Input,
         submit: Button)
-
 @(personalDetails: Form[PersonalDetails])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some(messages("name.title") + " – " + messages("site.service_name"))) {
+@layout(pageTitle = Some(messages("phone.title") + " – " + messages("site.service_name"))) {
 
-    @form(action = PersonalDetailsAccountController.acceptName()) {
+    @form(action = PersonalDetailsAccountController.startPage()) {
         <header class="hmrc-page-heading">
             <p class="govuk-caption-xl hmrc-caption-xl"><span class="govuk-visually-hidden">
-                This section is </span>@messages("name.section")</p>
-            <h1 class="govuk-heading-xl">@messages("name.heading")</h1>
+                This section is </span>@messages("phone.section")</p>
+            <h1 class="govuk-heading-xl">@messages("phone.heading")</h1>
         </header>
 
-        @input(id = "name",
-            name = "name",
-            value = Some(personalDetails.value.getOrElse(PersonalDetails()).name.name),
-            labelParams = LabelParams(content = Text(messages("name.input"))),
+        @input(id = "phone-number",
+            name = "phone-number",
+            labelParams = LabelParams(content = Text(messages("phone.input"))),
             classes = "govuk-!-width-two-thirds")
 
         @submit()(content = Text(messages("site.saveAndContinue")))
