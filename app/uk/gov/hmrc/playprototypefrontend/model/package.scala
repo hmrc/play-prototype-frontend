@@ -31,7 +31,7 @@ package object model {
 
   case class Address(lines: Seq[String] = Empty) {
 
-    def asText = lines mkString ("\n")
+    def asText = lines mkString ("\r\n")
   }
 
   case class PersonalDetails(name: Name = Name(""),

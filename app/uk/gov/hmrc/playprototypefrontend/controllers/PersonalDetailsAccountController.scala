@@ -34,6 +34,7 @@ class PersonalDetailsAccountController @Inject()(
                                                   phoneView: Phone,
                                                   addressView: Address,
                                                   contactView: ContactPreference,
+                                                  summaryView: Summary,
                                                   appConfig: AppConfig,
                                                   mcc: MessagesControllerComponents
                                                 ) extends FrontendController(mcc) {
@@ -123,7 +124,7 @@ class PersonalDetailsAccountController @Inject()(
           case Some(pda) => pda.copy(contact = personalDetails.contact)
           case _ => personalDetails
         }
-        Future.successful(Ok(contactView(contactForm)).addingToSession("personalDetails" -> Json.toJson(result).toString()))
+        Future.successful(Ok(summaryView(contactForm)).addingToSession("personalDetails" -> Json.toJson(result).toString()))
       }
     )
   }

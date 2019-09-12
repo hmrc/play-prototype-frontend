@@ -15,4 +15,6 @@ POST       /address                         uk.gov.hmrc.playprototypefrontend.co
 GET        /contact                         uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.contactPage
 POST       /contact                         uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.acceptContact
 
+POST       /summary                         uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.acceptContact
+
 GET        /assets/*file                    controllers.Assets.versioned(path="/public", file: Asset)
