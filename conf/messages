@@ -19,6 +19,12 @@ address.section = Personal details
 address.input = What is your address?
 address.inputInvalid = Address invalid
 
+contact.title = Can we write to you – Personal details
+contact.heading = Contact preferences
+contact.section = Personal details
+contact.input = Can we write to you?
+contact.inputInvalid = Contact preferences invalid
+
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset
 session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.

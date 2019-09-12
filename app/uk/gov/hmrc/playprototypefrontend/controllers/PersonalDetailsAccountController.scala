@@ -21,7 +21,7 @@ import play.api.libs.json._
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.playprototypefrontend.config.AppConfig
-import uk.gov.hmrc.playprototypefrontend.model.{PersonalDetails, addressForm, nameForm, personalDetailsForm, personalDetailsFormat, phoneForm}
+import uk.gov.hmrc.playprototypefrontend.model.{PersonalDetails, addressForm, contactForm, nameForm, personalDetailsForm, personalDetailsFormat, phoneForm}
 import uk.gov.hmrc.playprototypefrontend.views.html._
 
 import scala.concurrent.Future
@@ -33,6 +33,7 @@ class PersonalDetailsAccountController @Inject()(
                                                   nameView: Name,
                                                   phoneView: Phone,
                                                   addressView: Address,
+                                                  contactView: ContactPreference,
                                                   appConfig: AppConfig,
                                                   mcc: MessagesControllerComponents
                                                 ) extends FrontendController(mcc) {
@@ -75,7 +76,7 @@ class PersonalDetailsAccountController @Inject()(
       personalDetails => {
         val storedPersonalDetails = request.session.get("personalDetails").map(Json.parse).map(Json.fromJson[PersonalDetails]).map(_.get)
         val result = storedPersonalDetails match {
-          case Some(pda) => pda.copy(name = pda.name, phone = personalDetails.phone)
+          case Some(pda) => pda.copy(phone = personalDetails.phone)
           case _ => personalDetails
         }
         Future.successful(Ok(addressView(phoneForm)).addingToSession("personalDetails" -> Json.toJson(result).toString()))
@@ -97,10 +98,32 @@ class PersonalDetailsAccountController @Inject()(
       personalDetails => {
         val storedPersonalDetails = request.session.get("personalDetails").map(Json.parse).map(Json.fromJson[PersonalDetails]).map(_.get)
         val result = storedPersonalDetails match {
-          case Some(pda) => pda.copy(name = pda.name, phone = pda.phone, address = personalDetails.address)
+          case Some(pda) => pda.copy(address = personalDetails.address)
           case _ => personalDetails
         }
-        Future.successful(Ok(addressView(phoneForm)).addingToSession("personalDetails" -> Json.toJson(result).toString()))
+        Future.successful(Ok(contactView(addressForm)).addingToSession("personalDetails" -> Json.toJson(result).toString()))
+      }
+    )
+  }
+
+  val contactPage: Action[AnyContent] = Action.async { implicit request =>
+
+    Future.successful(Ok(contactView(personalDetailsForm)))
+  }
+
+  val acceptContact: Action[AnyContent] = Action.async { implicit request =>
+
+    contactForm.bindFromRequest.fold(
+      formWithErrors => {
+        Future.successful(BadRequest(contactView(formWithErrors)))
+      },
+      personalDetails => {
+        val storedPersonalDetails = request.session.get("personalDetails").map(Json.parse).map(Json.fromJson[PersonalDetails]).map(_.get)
+        val result = storedPersonalDetails match {
+          case Some(pda) => pda.copy(contact = personalDetails.contact)
+          case _ => personalDetails
+        }
+        Future.successful(Ok(contactView(contactForm)).addingToSession("personalDetails" -> Json.toJson(result).toString()))
       }
     )
   }

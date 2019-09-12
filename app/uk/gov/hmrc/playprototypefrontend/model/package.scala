@@ -36,7 +36,8 @@ package object model {
 
   case class PersonalDetails(name: Name = Name(""),
                              phone: PhoneNumber = PhoneNumber(""),
-                             address: Address = Address())
+                             address: Address = Address(),
+                             contact: String = "No")
 
   implicit val optionStringFormat = play.api.libs.json.Format.optionWithNull[String]
 
@@ -78,6 +79,17 @@ package object model {
     )(
       personalDetails =>
         Some(personalDetails.address.asText)
+    )
+  )
+
+  val contactForm = Form[PersonalDetails](
+    mapping(
+      "canWeWrite" -> nonEmptyText.verifying(pattern(regex = """(Yes|No)""".r, error = "contact.inputInvalid", name = ""))
+    )(
+      a => PersonalDetails(contact = a)
+    )(
+      personalDetails =>
+        Some(personalDetails.contact)
     )
   )
 

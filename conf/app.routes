@@ -9,7 +9,10 @@ POST       /name                            uk.gov.hmrc.playprototypefrontend.co
 GET        /phone                           uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.phonePage
 POST       /phone                           uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.acceptPhone
 
-GET        /address                           uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.addressPage
-POST       /address                           uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.acceptAddress
+GET        /address                         uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.addressPage
+POST       /address                         uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.acceptAddress
+
+GET        /contact                         uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.contactPage
+POST       /contact                         uk.gov.hmrc.playprototypefrontend.controllers.PersonalDetailsAccountController.acceptContact
 
 GET        /assets/*file                    controllers.Assets.versioned(path="/public", file: Asset)
