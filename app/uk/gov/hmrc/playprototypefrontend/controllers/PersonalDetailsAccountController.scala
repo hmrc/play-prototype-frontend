@@ -59,7 +59,7 @@ class PersonalDetailsAccountController @Inject()(
       },
       personalDetails => {
         val result = personalDetailsInSession.copy(name = personalDetails.name)
-        Future.successful(Ok(phoneView(nameForm.fill(result))).withSession(request.session + ("personalDetails" -> Json.toJson(result).toString())))
+        Future.successful(Ok(phoneView(nameForm.fill(result))).withSession(updatingPersonalDetails(result)))
       }
     )
   }
@@ -77,7 +77,7 @@ class PersonalDetailsAccountController @Inject()(
       },
       personalDetails => {
         val result = personalDetailsInSession.copy(phone = personalDetails.phone)
-        Future.successful(Ok(addressView(phoneForm.fill(result))).withSession(request.session + ("personalDetails" -> Json.toJson(result).toString())))
+        Future.successful(Ok(addressView(phoneForm.fill(result))).withSession(updatingPersonalDetails(result)))
       }
     )
   }
@@ -95,7 +95,7 @@ class PersonalDetailsAccountController @Inject()(
       },
       personalDetails => {
         val result = personalDetailsInSession.copy(address = personalDetails.address)
-        Future.successful(Ok(contactView(addressForm.fill(result))).withSession(request.session + ("personalDetails" -> Json.toJson(result).toString())))
+        Future.successful(Ok(contactView(addressForm.fill(result))).withSession(updatingPersonalDetails(result)))
       }
     )
   }
@@ -113,12 +113,16 @@ class PersonalDetailsAccountController @Inject()(
       },
       personalDetails => {
         val result = personalDetailsInSession.copy(canWeWrite = personalDetails.canWeWrite)
-        Future.successful(Ok(summaryView(contactForm.fill(result))).withSession(request.session + ("personalDetails" -> Json.toJson(result).toString())))
+        Future.successful(Ok(summaryView(contactForm.fill(result))).withSession(updatingPersonalDetails(result)))
       }
     )
   }
 
   private def personalDetailsInSession(implicit request: MessagesRequest[_]) = {
     request.session.get("personalDetails").map(Json.parse).map(Json.fromJson[PersonalDetails]).map(_.get) getOrElse PersonalDetails()
+  }
+
+  private def updatingPersonalDetails(result: PersonalDetails)(implicit request: MessagesRequest[_]) = {
+    request.session + ("personalDetails" -> Json.toJson(result).toString())
   }
 }
