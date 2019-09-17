@@ -45,7 +45,7 @@
                     )),
             classes = "govuk-radios--inline",
             name = "canWeWrite",
-            items = mapRadioItems(Seq("Yes","No"), personalDetails("contact"))
+            items = mapRadioItems(Seq(messages("site.yes"),messages("site.no")), personalDetails("canWeWrite"))
         )
 
         @submit()(content = Text(messages("site.saveAndContinue")))

@@ -18,7 +18,6 @@ package uk.gov.hmrc.playprototypefrontend.views
 
 import play.api.data.{Field, Form, FormError}
 import play.api.i18n.Messages
-import play.api.libs.json.Json
 import uk.gov.hmrc.govukfrontend.views.html.components._
 import uk.gov.hmrc.playprototypefrontend.controllers.routes._
 import uk.gov.hmrc.playprototypefrontend.model.PersonalDetails
@@ -44,34 +43,29 @@ object ViewUtils {
     }
   }
 
-  def mapName(pda: PersonalDetails): Row =
+  def mapNameToSummary(pda: PersonalDetails): Row =
     Row(key = Key(Text("Name")),
       value = Value(Text(s"${pda.name.name}")),
       actions = Some(Actions(items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.namePage()}", content = Text("Change"))))))
 
-  def mapPhone(pda: PersonalDetails): Row =
+  def mapPhoneToSummary(pda: PersonalDetails): Row =
     Row(key = Key(Text("Phone number")),
       value = Value(Text(s"${pda.phone.phoneNumber}")),
       actions = Some(Actions(items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.phonePage()}", content = Text("Change"))))))
 
-  def mapAddress(pda: PersonalDetails): Row =
+  def mapAddressToSummary(pda: PersonalDetails): Row =
     Row(key = Key(Text("Address")),
       value = Value(Text(s"${pda.address.asText}")),
       actions = Some(Actions(items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.addressPage()}", content = Text("Change"))))))
 
-  def mapContactPref(pda: PersonalDetails): Row =
+  def mapContactPrefToSummary(pda: PersonalDetails): Row =
     Row(key = Key(Text("Can we write to you?")),
-      value = Value(Text(s"${pda.contact}")),
+      value = Value(Text(s"${pda.canWeWrite}")),
       actions = Some(Actions(items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.contactPage()}", content = Text("Change"))))))
 
-  def mapPersonalDetailsToSummary()(implicit messages: Messages, session: play.api.mvc.Session): Seq[Row] = {
+  def mapPersonalDetailsToSummary(form: Form[PersonalDetails])(implicit messages: Messages): Seq[Row] = {
 
-    val storedPersonalDetails = session.get("personalDetails").map(Json.parse).map(Json.fromJson[PersonalDetails]).map(_.get)
-    val result = storedPersonalDetails match {
-      case Some(pda) => pda
-      case _ => PersonalDetails()
-    }
-
-    Seq(mapName(result), mapPhone(result), mapAddress(result), mapContactPref(result))
+    val details = form.value.getOrElse(PersonalDetails())
+    Seq(mapNameToSummary(details), mapPhoneToSummary(details), mapAddressToSummary(details), mapContactPrefToSummary(details))
   }
 }

@@ -43,12 +43,12 @@ class PersonalDetailsAccountController @Inject()(
 
   val startPage: Action[AnyContent] = Action.async { implicit request =>
 
-    Future.successful(Ok(personalDetailsStart()))
+    Future.successful(Ok(personalDetailsStart()).withNewSession)
   }
 
   val namePage: Action[AnyContent] = Action.async { implicit request =>
 
-    Future.successful(Ok(nameView(personalDetailsForm)))
+    Future.successful(Ok(nameView(personalDetailsForm.fill(personalDetailsInSession))))
   }
 
   val acceptName: Action[AnyContent] = Action.async { implicit request =>
@@ -58,14 +58,15 @@ class PersonalDetailsAccountController @Inject()(
         Future.successful(BadRequest(nameView(formWithErrors)))
       },
       personalDetails => {
-        Future.successful(Ok(phoneView(nameForm)).addingToSession("personalDetails" -> Json.toJson(personalDetails).toString()))
+        val result = personalDetailsInSession.copy(name = personalDetails.name)
+        Future.successful(Ok(phoneView(nameForm.fill(result))).withSession(request.session + ("personalDetails" -> Json.toJson(result).toString())))
       }
     )
   }
 
   val phonePage: Action[AnyContent] = Action.async { implicit request =>
 
-    Future.successful(Ok(phoneView(personalDetailsForm)))
+    Future.successful(Ok(phoneView(personalDetailsForm.fill(personalDetailsInSession))))
   }
 
   val acceptPhone: Action[AnyContent] = Action.async { implicit request =>
@@ -75,19 +76,15 @@ class PersonalDetailsAccountController @Inject()(
         Future.successful(BadRequest(phoneView(formWithErrors)))
       },
       personalDetails => {
-        val storedPersonalDetails = request.session.get("personalDetails").map(Json.parse).map(Json.fromJson[PersonalDetails]).map(_.get)
-        val result = storedPersonalDetails match {
-          case Some(pda) => pda.copy(phone = personalDetails.phone)
-          case _ => personalDetails
-        }
-        Future.successful(Ok(addressView(phoneForm)).addingToSession("personalDetails" -> Json.toJson(result).toString()))
+        val result = personalDetailsInSession.copy(phone = personalDetails.phone)
+        Future.successful(Ok(addressView(phoneForm.fill(result))).withSession(request.session + ("personalDetails" -> Json.toJson(result).toString())))
       }
     )
   }
 
   val addressPage: Action[AnyContent] = Action.async { implicit request =>
 
-    Future.successful(Ok(addressView(personalDetailsForm)))
+    Future.successful(Ok(addressView(personalDetailsForm.fill(personalDetailsInSession))))
   }
 
   val acceptAddress: Action[AnyContent] = Action.async { implicit request =>
@@ -97,19 +94,15 @@ class PersonalDetailsAccountController @Inject()(
         Future.successful(BadRequest(addressView(formWithErrors)))
       },
       personalDetails => {
-        val storedPersonalDetails = request.session.get("personalDetails").map(Json.parse).map(Json.fromJson[PersonalDetails]).map(_.get)
-        val result = storedPersonalDetails match {
-          case Some(pda) => pda.copy(address = personalDetails.address)
-          case _ => personalDetails
-        }
-        Future.successful(Ok(contactView(addressForm)).addingToSession("personalDetails" -> Json.toJson(result).toString()))
+        val result = personalDetailsInSession.copy(address = personalDetails.address)
+        Future.successful(Ok(contactView(addressForm.fill(result))).withSession(request.session + ("personalDetails" -> Json.toJson(result).toString())))
       }
     )
   }
 
   val contactPage: Action[AnyContent] = Action.async { implicit request =>
 
-    Future.successful(Ok(contactView(personalDetailsForm)))
+    Future.successful(Ok(contactView(personalDetailsForm.fill(personalDetailsInSession))))
   }
 
   val acceptContact: Action[AnyContent] = Action.async { implicit request =>
@@ -119,14 +112,13 @@ class PersonalDetailsAccountController @Inject()(
         Future.successful(BadRequest(contactView(formWithErrors)))
       },
       personalDetails => {
-        val storedPersonalDetails = request.session.get("personalDetails").map(Json.parse).map(Json.fromJson[PersonalDetails]).map(_.get)
-        val result = storedPersonalDetails match {
-          case Some(pda) => pda.copy(contact = personalDetails.contact)
-          case _ => personalDetails
-        }
-        Future.successful(Ok(summaryView(contactForm)).addingToSession("personalDetails" -> Json.toJson(result).toString()))
+        val result = personalDetailsInSession.copy(canWeWrite = personalDetails.canWeWrite)
+        Future.successful(Ok(summaryView(contactForm.fill(result))).withSession(request.session + ("personalDetails" -> Json.toJson(result).toString())))
       }
     )
   }
 
+  private def personalDetailsInSession(implicit request: MessagesRequest[_]) = {
+    request.session.get("personalDetails").map(Json.parse).map(Json.fromJson[PersonalDetails]).map(_.get) getOrElse PersonalDetails()
+  }
 }

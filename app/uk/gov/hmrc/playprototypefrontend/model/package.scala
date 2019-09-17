@@ -37,7 +37,7 @@ package object model {
   case class PersonalDetails(name: Name = Name(""),
                              phone: PhoneNumber = PhoneNumber(""),
                              address: Address = Address(),
-                             contact: String = "No")
+                             canWeWrite: String = "")
 
   implicit val optionStringFormat = play.api.libs.json.Format.optionWithNull[String]
 
@@ -62,7 +62,7 @@ package object model {
 
   val phoneForm = Form[PersonalDetails](
     mapping(
-      "phone-number" -> nonEmptyText.verifying(pattern(regex = """\d+""".r, error = "phone.inputInvalid", name = ""))
+      "phone-number" -> nonEmptyText.verifying(pattern(regex = """07\d{9}""".r, error = "phone.inputInvalid", name = ""))
     )(
       a => PersonalDetails(phone = PhoneNumber(a))
     )(
@@ -73,7 +73,7 @@ package object model {
 
   val addressForm = Form[PersonalDetails](
     mapping(
-      "address" -> nonEmptyText.verifying(pattern(regex = """(\w|\s)+""".r, error = "address.inputInvalid", name = ""))
+      "address" -> nonEmptyText.verifying(pattern(regex = """\w(\w|\s)*""".r, error = "address.inputInvalid", name = ""))
     )(
       a => PersonalDetails(address = Address(a.split("\r\n")))
     )(
@@ -86,10 +86,10 @@ package object model {
     mapping(
       "canWeWrite" -> nonEmptyText.verifying(pattern(regex = """(Yes|No)""".r, error = "contact.inputInvalid", name = ""))
     )(
-      a => PersonalDetails(contact = a)
+      a => PersonalDetails(canWeWrite = a)
     )(
       personalDetails =>
-        Some(personalDetails.contact)
+        Some(personalDetails.canWeWrite)
     )
   )
 
@@ -97,12 +97,13 @@ package object model {
     mapping(
       "name" -> text.verifying(pattern(regex = """\D+""".r, error = "name.inputInvalid", name = "")),
       "phone-number" -> nonEmptyText.verifying(pattern(regex = """\d+""".r, error = "phone.inputInvalid", name = "")),
-      "address" -> nonEmptyText.verifying(pattern(regex = """(\w|\s)+""".r, error = "address.inputInvalid", name = ""))
+      "address" -> nonEmptyText.verifying(pattern(regex = """(\w|\s)+""".r, error = "address.inputInvalid", name = "")),
+      "canWeWrite" -> nonEmptyText.verifying(pattern(regex = """(Yes|No)""".r, error = "contact.inputInvalid", name = ""))
     )(
-      (a, b, c) => PersonalDetails(Name(a), PhoneNumber(b), Address(c.split("\r\n")))
+      (a, b, c, d) => PersonalDetails(Name(a), PhoneNumber(b), Address(c.split("\r\n")), d)
     )(
       personalDetails =>
-        Some(personalDetails.name.name, personalDetails.phone.phoneNumber, personalDetails.address.asText)
+        Some(personalDetails.name.name, personalDetails.phone.phoneNumber, personalDetails.address.asText, personalDetails.canWeWrite)
     )
   )
 
