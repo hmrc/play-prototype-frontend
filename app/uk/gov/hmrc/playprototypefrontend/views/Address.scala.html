@@ -18,16 +18,25 @@
 @import uk.gov.hmrc.govukfrontend.views.html.helpers._
 @import uk.gov.hmrc.playprototypefrontend.controllers.routes._
 @import uk.gov.hmrc.playprototypefrontend.model._
+@import uk.gov.hmrc.playprototypefrontend.views.ViewUtils._
 
 @this(layout: Layout,
         form: FormWithCSRF,
+        backLink: BackLink,
+        errorSummary: ErrorSummary,
         input: Textarea,
         submit: Button)
 @(personalDetails: Form[PersonalDetails])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some(messages("address.title") + " – " + messages("site.service_name"))) {
+@layout(pageTitle = Some(messages("address.title") + " – " + messages("site.service_name")),
+    beforeContentBlock = Some(backLink(href = s"${PersonalDetailsAccountController.phonePage().url}")())) {
 
     @form(action = PersonalDetailsAccountController.acceptAddress()) {
+
+        @if(personalDetails.hasErrors) {
+            @errorSummary(mapErrorSummary(personalDetails.errors))(title = Text(messages("site.errorsExist")))()
+        }
+
         <header class="hmrc-page-heading">
             <p class="govuk-caption-xl hmrc-caption-xl"><span class="govuk-visually-hidden">
                 This section is </span>@messages("address.section")</p>
@@ -38,7 +47,7 @@
             name = "address",
             value = Some(personalDetails.value.getOrElse(PersonalDetails()).address.asText),
             labelParams = LabelParams(content = Text(messages("address.input"))),
-            classes = "govuk-!-width-two-thirds")
+            errorMessageParams = mapErrorMessage(personalDetails.errors.filter(error => error.key == "address"), messageSelector = "address.inputInvalid"))
 
         @submit()(content = Text(messages("site.saveAndContinue")))
     }

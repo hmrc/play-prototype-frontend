@@ -73,7 +73,7 @@ package object model {
 
   val addressForm = Form[PersonalDetails](
     mapping(
-      "address" -> nonEmptyText.verifying(pattern(regex = """\w(\w|,\s)*""".r, error = "address.inputInvalid", name = ""))
+      "address" -> text.verifying(pattern(regex = """\w(\w|,|\s)*""".r, error = "address.inputInvalid", name = ""))
     )(
       a => PersonalDetails(address = Address(a.split("\r\n")))
     )(

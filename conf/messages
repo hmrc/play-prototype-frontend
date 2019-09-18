@@ -17,7 +17,7 @@ address.title = Your address – Personal details
 address.heading = Your address
 address.section = Personal details
 address.input = What is your address?
-address.inputInvalid = Address invalid
+address.inputInvalid = Enter your address
 
 contact.title = Can we write to you – Personal details
 contact.heading = Contact preferences
