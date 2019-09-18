@@ -24,24 +24,26 @@ import uk.gov.hmrc.playprototypefrontend.model.PersonalDetails
 
 object ViewUtils {
 
-  def errorPrefix(form: Form[_])(implicit messages: Messages): String = {
+  def errorPrefix(form: Form[_])(implicit messages: Messages): String =
     if (form.hasErrors || form.hasGlobalErrors)
       messages("error.browser.title.prefix")
     else ""
-  }
 
-  def mapErrors(errors: Seq[FormError])(implicit messages: Messages): Seq[ErrorLink] = {
+  def mapErrorSummary(errors: Seq[FormError])(implicit messages: Messages): Seq[ErrorLink] =
     errors.map { error =>
       ErrorLink(href = Some(error.key),
         content = HtmlContent(messages(error.message, error.args: _*)))
     }
-  }
 
-  def mapRadioItems(options: Seq[String], field: Field)(implicit messages: Messages): Seq[RadioItem] = {
+  def mapErrorMessage(errors: Seq[FormError], messageSelector: String)(implicit messages: Messages): Option[ErrorMessageParams] =
+    errors.find(_.message == messageSelector)
+      .map(error =>
+        ErrorMessageParams(content = Text(error.format)))
+
+  def mapRadioItems(options: Seq[String], field: Field)(implicit messages: Messages): Seq[RadioItem] =
     options.map { option =>
       RadioItem(content = Text(messages(option)), id = Some(option), value = Some(option), checked = field.value == Some(option))
     }
-  }
 
   def mapNameToSummary(pda: PersonalDetails): Row =
     Row(key = Key(Text("Name")),
@@ -64,7 +66,6 @@ object ViewUtils {
       actions = Some(Actions(items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.contactPage()}", content = Text("Change"))))))
 
   def mapPersonalDetailsToSummary(form: Form[PersonalDetails])(implicit messages: Messages): Seq[Row] = {
-
     val details = form.value.getOrElse(PersonalDetails())
     Seq(mapNameToSummary(details), mapPhoneToSummary(details), mapAddressToSummary(details), mapContactPrefToSummary(details))
   }

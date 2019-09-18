@@ -5,7 +5,7 @@ name.title = Your name – Personal details
 name.heading = Your name
 name.section = Personal details
 name.input = What is your name?
-name.inputInvalid = Name invalid
+name.inputInvalid = Enter your full name
 
 phone.title = Your phone number – Personal details
 phone.heading = Your phone number
@@ -42,6 +42,7 @@ site.hidden-delete = Delete {0}
 site.hidden-edit = Change {0}
 site.no = No
 site.yes = Yes
+site.errorsExist= There is a problem
 site.exitToGov = Exit to GOV.UK
 site.service_name = Personal Details Account – GOV.UK
 site.acceptAndSend = Accept and send
