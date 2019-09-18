@@ -48,7 +48,6 @@
             name = "name",
             value = Some(personalDetails.value.getOrElse(PersonalDetails()).name.name),
             labelParams = LabelParams(content = Text(messages("name.input"))),
-            classes = "govuk-!-width-two-thirds",
             errorMessageParams = mapErrorMessage(personalDetails.errors.filter(error => error.key == "name"), messageSelector = "name.inputInvalid"))
 
         @submit()(content = Text(messages("site.saveAndContinue")))
