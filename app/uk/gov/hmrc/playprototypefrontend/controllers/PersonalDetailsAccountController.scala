@@ -43,7 +43,7 @@ class PersonalDetailsAccountController @Inject()(
 
   val startPage: Action[AnyContent] = Action.async { implicit request =>
 
-    Future.successful(Ok(personalDetailsStart()).withNewSession)
+    Future.successful(Ok(personalDetailsStart()))
   }
 
   val namePage: Action[AnyContent] = Action.async { implicit request =>
