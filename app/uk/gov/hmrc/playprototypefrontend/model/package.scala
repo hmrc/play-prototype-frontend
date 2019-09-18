@@ -62,7 +62,7 @@ package object model {
 
   val phoneForm = Form[PersonalDetails](
     mapping(
-      "phone-number" -> nonEmptyText.verifying(pattern(regex = """07\d{9}""".r, error = "phone.inputInvalid", name = ""))
+      "phone-number" -> text.verifying(pattern(regex = """07\d{9}""".r, error = "phone.inputInvalid", name = ""))
     )(
       a => PersonalDetails(phone = PhoneNumber(a))
     )(
