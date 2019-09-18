@@ -40,9 +40,9 @@ object ViewUtils {
       .map(error =>
         ErrorMessageParams(content = Text(error.format)))
 
-  def mapRadioItems(options: Seq[String], field: Field)(implicit messages: Messages): Seq[RadioItem] =
+  def mapRadioItems(options: Seq[String], form: Form[PersonalDetails])(implicit messages: Messages): Seq[RadioItem] =
     options.map { option =>
-      RadioItem(content = Text(messages(option)), id = Some(option), value = Some(option), checked = field.value == Some(option))
+      RadioItem(content = Text(option), id = Some(option), value = Some(option), checked = form.value.getOrElse(PersonalDetails()).canWeWrite == option)
     }
 
   def mapNameToSummary(pda: PersonalDetails): Row =

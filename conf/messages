@@ -23,7 +23,7 @@ contact.title = Can we write to you – Personal details
 contact.heading = Contact preferences
 contact.section = Personal details
 contact.input = Can we write to you?
-contact.inputInvalid = Contact preferences invalid
+contact.inputInvalid = Please provide an answer
 
 summary.title = Check your answers – Personal details
 summary.heading = Check your answers

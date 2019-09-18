@@ -37,7 +37,7 @@ package object model {
   case class PersonalDetails(name: Name = Name(""),
                              phone: PhoneNumber = PhoneNumber(""),
                              address: Address = Address(),
-                             canWeWrite: String = "")
+                             canWeWrite: Option[String] = None)
 
   implicit val optionStringFormat = play.api.libs.json.Format.optionWithNull[String]
 
@@ -84,21 +84,26 @@ package object model {
 
   val contactForm = Form[PersonalDetails](
     mapping(
-      "canWeWrite" -> nonEmptyText.verifying(pattern(regex = """(Yes|No)""".r, error = "contact.inputInvalid", name = ""))
+      "canWeWrite" -> optional(text)
     )(
       a => PersonalDetails(canWeWrite = a)
     )(
-      personalDetails =>
-        Some(personalDetails.canWeWrite)
+      personalDetails => Some(personalDetails.canWeWrite)
+    ).verifying(
+      "contact.inputInvalid",
+      personalDetails => personalDetails.canWeWrite match {
+        case None => false
+        case Some(_) => true
+      }
     )
   )
 
   val personalDetailsForm = Form[PersonalDetails](
     mapping(
       "name" -> text.verifying(pattern(regex = """\D+""".r, error = "name.inputInvalid", name = "")),
-      "phone-number" -> nonEmptyText.verifying(pattern(regex = """\d+""".r, error = "phone.inputInvalid", name = "")),
-      "address" -> nonEmptyText.verifying(pattern(regex = """(\w|\s)+""".r, error = "address.inputInvalid", name = "")),
-      "canWeWrite" -> nonEmptyText.verifying(pattern(regex = """(Yes|No)""".r, error = "contact.inputInvalid", name = ""))
+      "phone-number" -> text.verifying(pattern(regex = """\d+""".r, error = "phone.inputInvalid", name = "")),
+      "address" -> text.verifying(pattern(regex = """(\w|\s)+""".r, error = "address.inputInvalid", name = "")),
+      "canWeWrite" -> optional(text)
     )(
       (a, b, c, d) => PersonalDetails(Name(a), PhoneNumber(b), Address(c.split("\r\n")), d)
     )(

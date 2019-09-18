@@ -22,20 +22,28 @@
 
 @this(layout: Layout,
         form: FormWithCSRF,
-        input: Radios,
+        backLink: BackLink,
+        errorSummary: ErrorSummary,
+        radios: Radios,
         submit: Button)
 @(personalDetails: Form[PersonalDetails])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some(messages("contact.title") + " – " + messages("site.service_name"))) {
+@layout(pageTitle = Some(messages("contact.title") + " – " + messages("site.service_name")),
+    beforeContentBlock = Some(backLink(href = s"${PersonalDetailsAccountController.addressPage().url}")())) {
 
     @form(action = PersonalDetailsAccountController.acceptContact()) {
+
+        @if(personalDetails.hasErrors) {
+            @errorSummary(mapErrorSummary(personalDetails.errors))(title = Text(messages("site.errorsExist")))()
+        }
+
         <header class="hmrc-page-heading">
             <p class="govuk-caption-xl hmrc-caption-xl"><span class="govuk-visually-hidden">
                 This section is </span>@messages("contact.section")</p>
             <h1 class="govuk-heading-xl">@messages("contact.heading")</h1>
         </header>
 
-        @input(
+        @radios(
             fieldsetParams =
                     Some(FieldsetParams(
                         legend = Some(
@@ -43,10 +51,9 @@
                                 content = Text(messages("contact.input"))
                             ))
                     )),
-            classes = "govuk-radios--inline",
             name = "canWeWrite",
-            items = mapRadioItems(Seq(messages("site.yes"),messages("site.no")), personalDetails("canWeWrite"))
-        )
+            items = mapRadioItems(Seq(messages("site.yes"),messages("site.no")), personalDetails),
+            errorMessageParams = mapErrorMessage(personalDetails.errors, messageSelector = "contact.inputInvalid"))
 
         @submit()(content = Text(messages("site.saveAndContinue")))
     }
