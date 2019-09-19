@@ -31,7 +31,7 @@ object ViewUtils {
 
   def mapErrorSummary(errors: Seq[FormError])(implicit messages: Messages): Seq[ErrorLink] =
     errors.map { error =>
-      ErrorLink(href = Some(error.key),
+      ErrorLink(href = Some(s"#${error.key}"),
         content = HtmlContent(messages(error.message, error.args: _*)))
     }
 
