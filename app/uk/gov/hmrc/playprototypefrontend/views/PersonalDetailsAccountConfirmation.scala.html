@@ -17,11 +17,13 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components._
 @import uk.gov.hmrc.govukfrontend.views.html.helpers._
 
-@this(layout: Layout)
-
+@this(layout: Layout,
+        panel: Panel)
 @()(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some(messages("start.title") + " – " + messages("site.service_name"))) {
+
+    @panel()(title = Text("Application complete"))(content = HtmlContent("Your reference number<br><strong>HDJ2123F</strong>"))
 
     <h1 class="govuk-heading-xl">@messages("start.heading")</h1>
 

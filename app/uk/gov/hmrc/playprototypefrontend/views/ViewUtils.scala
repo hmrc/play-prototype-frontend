@@ -45,27 +45,27 @@ object ViewUtils {
       RadioItem(content = Text(option), id = Some(option), value = Some(option), checked = form.value.getOrElse(PersonalDetails()).canWeWrite == Some(option))
     }
 
-  def mapNameToSummary(pda: PersonalDetails): Row =
-    Row(key = Key(Text("Name")),
+  def mapNameToSummary(pda: PersonalDetails): SummaryListRow =
+    SummaryListRow(key = Key(Text("Name")),
       value = Value(Text(s"${pda.name.name}")),
       actions = Some(Actions(items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.namePage()}", content = Text("Change"))))))
 
-  def mapPhoneToSummary(pda: PersonalDetails): Row =
-    Row(key = Key(Text("Phone number")),
+  def mapPhoneToSummary(pda: PersonalDetails): SummaryListRow =
+    SummaryListRow(key = Key(Text("Phone number")),
       value = Value(Text(s"${pda.phone.phoneNumber}")),
       actions = Some(Actions(items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.phonePage()}", content = Text("Change"))))))
 
-  def mapAddressToSummary(pda: PersonalDetails): Row =
-    Row(key = Key(Text("Address")),
+  def mapAddressToSummary(pda: PersonalDetails): SummaryListRow =
+    SummaryListRow(key = Key(Text("Address")),
       value = Value(Text(s"${pda.address.asText}")),
       actions = Some(Actions(items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.addressPage()}", content = Text("Change"))))))
 
-  def mapContactPrefToSummary(pda: PersonalDetails): Row =
-    Row(key = Key(Text("Can we write to you?")),
+  def mapContactPrefToSummary(pda: PersonalDetails): SummaryListRow =
+    SummaryListRow(key = Key(Text("Can we write to you?")),
       value = Value(Text(s"${pda.canWeWrite.get}")),
       actions = Some(Actions(items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.contactPage()}", content = Text("Change"))))))
 
-  def mapPersonalDetailsToSummary(form: Form[PersonalDetails])(implicit messages: Messages): Seq[Row] = {
+  def mapPersonalDetailsToSummary(form: Form[PersonalDetails])(implicit messages: Messages): Seq[SummaryListRow] = {
     val details = form.value.getOrElse(PersonalDetails())
     Seq(mapNameToSummary(details), mapPhoneToSummary(details), mapAddressToSummary(details), mapContactPrefToSummary(details))
   }
