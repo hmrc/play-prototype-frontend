@@ -15,6 +15,7 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.html.components.{BackLink => GovukBackLink, Footer => GovukFooter, _}
+@import uk.gov.hmrc.playprototypefrontend.controllers.routes._
 
 @this(
         govukTemplate: GovukTemplate,
@@ -75,7 +76,7 @@
     @footer(meta = Some(Meta(items =
     Seq(
     FooterItem(href= Some("https://govuk-prototype-kit.herokuapp.com/"), text= Some("GOV.UK Prototype Kit v9.1.0")),
-    FooterItem(href= Some("/prototype-admin/clear-data"), text= Some("Clear data"))
+    FooterItem(href= Some(s"${PersonalDetailsAccountController.clearPage().url}"), text= Some("Clear data"))
     ))))
 }
 
@@ -102,6 +103,7 @@
     headerBlock = headerDefault,
     beforeContentBlock = Some(beforeContentDefault),
     footerBlock = footerDefault,
+    mainClasses = Some("govuk-main-wrapper--auto-spacing"),
     bodyEndBlock = Some(bodyEndDefault))(mainContentDefault)
 
 

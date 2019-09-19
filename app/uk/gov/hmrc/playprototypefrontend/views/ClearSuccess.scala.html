@@ -18,22 +18,16 @@
 @import uk.gov.hmrc.playprototypefrontend.controllers.routes._
 
 @this(layout: Layout,
-      submit: Button)
+        warning: WarningText,
+        submit: Button)
 @()(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some(messages("start.title") + " – " + messages("site.service_name"))) {
+@layout(pageTitle = Some(messages("clearSuccess.title") + " – " + messages("site.service_name"))) {
 
-        <h1 class="govuk-heading-xl">@messages("start.heading")</h1>
+    <h1 class="govuk-heading-xl">@messages("clearSuccess.heading")</h1>
 
-        <p class="govuk-body">Use this service to:</p>
+    <p class="govuk-body">The session data has been cleared.</p>
 
-        <ul class="govuk-list govuk-list--bullet">
-            <li>enter your personal details</li>
-            <li>be told they’ve been saved even though they haven’t</li>
-            <li>try out different ways of creating services</li>
-        </ul>
+    <p class="govuk-body"><a href="@PersonalDetailsAccountController.startPage().url">@messages("start.heading")</a></p>
 
-        <p class="govuk-body">Registering takes around 1 minute.</p>
-
-        @submit(href = Some(PersonalDetailsAccountController.namePage().url), isStartButton = true)(content = Text(messages("site.start")))
 }

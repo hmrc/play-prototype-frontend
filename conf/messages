@@ -30,6 +30,12 @@ summary.heading = Check your answers
 summary.section = Personal details
 summary.input = Can we write to you?
 
+clear.title = Clear data?
+clear.heading = Clear data?
+
+clearSuccess.title = Data cleared
+clearSuccess.heading = Data cleared
+
 session_expired.title = For your security, this service has been reset
 session_expired.heading = For your security, this service has been reset
 session_expired.guidance = The details you have given have been deleted because you did not continue the service for 15 minutes.
@@ -40,6 +46,7 @@ site.delete = Remove
 site.edit = Change
 site.hidden-delete = Delete {0}
 site.hidden-edit = Change {0}
+site.clear = Clear the data
 site.no = No
 site.yes = Yes
 site.errorsExist= There is a problem
