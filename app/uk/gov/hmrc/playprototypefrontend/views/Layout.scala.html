@@ -17,40 +17,41 @@
 @import uk.gov.hmrc.govukfrontend.views.html.components.{BackLink => GovukBackLink, Footer => GovukFooter, _}
 
 @this(
-  govukTemplate: GovukTemplate,
-  phaseBanner: PhaseBanner,
-  head: head,
-  header: Header,
-  scripts: scripts,
-  backLink: GovukBackLink,
-  getHelp: GetHelp
+        govukTemplate: GovukTemplate,
+        phaseBanner: PhaseBanner,
+        head: head,
+        header: Header,
+        footer: GovukFooter,
+        scripts: scripts,
+        backLink: GovukBackLink,
+        getHelp: GetHelp
 )
 
 @(pageTitle: Option[String] = None,
-  headBlock: Option[Html] = None,
-  headerBlock: Option[Html] = None,
-  beforeContentBlock: Option[Html] = None,
-  bodyEndBlock: Option[Html] = None)(contentBlock: Html)(implicit request : Request[_], messages: Messages)
+        headBlock: Option[Html] = None,
+        headerBlock: Option[Html] = None,
+        beforeContentBlock: Option[Html] = None,
+        bodyEndBlock: Option[Html] = None)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
 @headDefault = {
-  @if(headBlock.isDefined) {
-   @headBlock
-  } else {
+@if(headBlock.isDefined) {
+    @headBlock
+} else {
     @head()
-  }
+}
 }
 
 @headerDefault = {
- @if(headerBlock.isDefined) {
-  @headerBlock
- } else {
+@if(headerBlock.isDefined) {
+    @headerBlock
+} else {
     @header(HeaderParams(
         homepageUrl = Some("/play-prototype-frontend"),
         serviceName = Some("Personal Details Account"),
         serviceUrl = Some("/play-prototype-frontend"),
         containerClasses = "govuk-width-container",
         assetsPath = Some("/assets")))
- }
+}
 }
 
 @phaseBannerMessage = {
@@ -63,35 +64,44 @@
 }
 }
 
- @beforeContentDefault = {
- @if(beforeContentBlock.isDefined) {
-     @beforeContentBlock
- } else {
- }
+@beforeContentDefault = {
+@if(beforeContentBlock.isDefined) {
+    @beforeContentBlock
+} else {
+}
+}
+
+@footerDefault = {
+    @footer(meta = Some(Meta(items =
+    Seq(
+    FooterItem(href= Some("https://govuk-prototype-kit.herokuapp.com/"), text= Some("GOV.UK Prototype Kit v9.1.0")),
+    FooterItem(href= Some("/prototype-admin/clear-data"), text= Some("Clear data"))
+    ))))
 }
 
 @bodyEndDefault = {
-    @if(bodyEndBlock.isDefined) {
-        @bodyEndBlock
-    } else {
-        @scripts()
-    }
+@if(bodyEndBlock.isDefined) {
+    @bodyEndBlock
+} else {
+    @scripts()
+}
 }
 
 @mainContentDefault = {
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            @contentBlock
+        @contentBlock
         </div>
     </div>
 }
 
 @govukTemplate(
-  htmlLang = Some("en"),
-  pageTitle = pageTitle,
-  headBlock = Some(headDefault),
-  headerBlock = headerDefault,
-  beforeContentBlock = Some(beforeContentDefault),
-  bodyEndBlock = Some(bodyEndDefault))(mainContentDefault)
+    htmlLang = Some("en"),
+    pageTitle = pageTitle,
+    headBlock = Some(headDefault),
+    headerBlock = headerDefault,
+    beforeContentBlock = Some(beforeContentDefault),
+    footerBlock = footerDefault,
+    bodyEndBlock = Some(bodyEndDefault))(mainContentDefault)
 
 
