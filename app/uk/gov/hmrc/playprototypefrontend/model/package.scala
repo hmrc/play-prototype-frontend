@@ -84,17 +84,16 @@ package object model {
 
   val contactForm = Form[PersonalDetails](
     mapping(
-      "canWeWrite" -> optional(text)
+      "canWeWrite" -> optional(text).verifying("contact.inputInvalid",
+        canWeWrite => canWeWrite match {
+          case None => false
+          case Some(_) => true
+        }
+      )
     )(
       a => PersonalDetails(canWeWrite = a)
     )(
       personalDetails => Some(personalDetails.canWeWrite)
-    ).verifying(
-      "contact.inputInvalid",
-      personalDetails => personalDetails.canWeWrite match {
-        case None => false
-        case Some(_) => true
-      }
     )
   )
 
