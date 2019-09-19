@@ -42,7 +42,7 @@ object ViewUtils {
 
   def mapRadioItems(options: Seq[String], form: Form[PersonalDetails])(implicit messages: Messages): Seq[RadioItem] =
     options.map { option =>
-      RadioItem(content = Text(option), id = Some(option), value = Some(option), checked = form.value.getOrElse(PersonalDetails()).canWeWrite == option)
+      RadioItem(content = Text(option), id = Some(option), value = Some(option), checked = form.value.getOrElse(PersonalDetails()).canWeWrite == Some(option))
     }
 
   def mapNameToSummary(pda: PersonalDetails): Row =
@@ -62,7 +62,7 @@ object ViewUtils {
 
   def mapContactPrefToSummary(pda: PersonalDetails): Row =
     Row(key = Key(Text("Can we write to you?")),
-      value = Value(Text(s"${pda.canWeWrite}")),
+      value = Value(Text(s"${pda.canWeWrite.get}")),
       actions = Some(Actions(items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.contactPage()}", content = Text("Change"))))))
 
   def mapPersonalDetailsToSummary(form: Form[PersonalDetails])(implicit messages: Messages): Seq[Row] = {

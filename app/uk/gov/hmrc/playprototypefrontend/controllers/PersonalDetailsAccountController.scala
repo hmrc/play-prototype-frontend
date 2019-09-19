@@ -35,6 +35,7 @@ class PersonalDetailsAccountController @Inject()(
                                                   addressView: Address,
                                                   contactView: ContactPreference,
                                                   summaryView: Summary,
+                                                  personalDetailsConfirm: PersonalDetailsAccountConfirmation,
                                                   appConfig: AppConfig,
                                                   mcc: MessagesControllerComponents
                                                 ) extends FrontendController(mcc) {
@@ -116,6 +117,11 @@ class PersonalDetailsAccountController @Inject()(
         Future.successful(Ok(summaryView(contactForm.fill(result))).withSession(updatingPersonalDetails(result)))
       }
     )
+  }
+
+  val confirmPage: Action[AnyContent] = Action.async { implicit request =>
+
+    Future.successful(Ok(personalDetailsConfirm()).withNewSession)
   }
 
   private def personalDetailsInSession(implicit request: MessagesRequest[_]) = {

@@ -28,15 +28,14 @@
 
 @layout(pageTitle = Some(messages("summary.title") + " – " + messages("site.service_name"))) {
 
-    @form(action = PersonalDetailsAccountController.startPage()) {
+    @form(action = PersonalDetailsAccountController.confirmPage()) {
         <header class="hmrc-page-heading">
             <p class="govuk-caption-xl hmrc-caption-xl"><span class="govuk-visually-hidden">
                 This section is </span>@messages("summary.section")</p>
             <h1 class="govuk-heading-xl">@messages("summary.heading")</h1>
         </header>
 
-        @input(rows = mapPersonalDetailsToSummary(personalDetails),
-            classes = "govuk-!-width-two-thirds")
+        @input(rows = mapPersonalDetailsToSummary(personalDetails))
 
 
         <h2 class="govuk-heading-m">Now send your application</h2>
