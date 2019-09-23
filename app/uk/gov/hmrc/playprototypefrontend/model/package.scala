@@ -107,7 +107,7 @@ package object model {
       (a, b, c, d) => PersonalDetails(Name(a), PhoneNumber(b), Address(c.split("\r\n")), d)
     )(
       personalDetails =>
-        Some(personalDetails.name.name, personalDetails.phone.phoneNumber, personalDetails.address.asText, personalDetails.canWeWrite)
+        Some((personalDetails.name.name, personalDetails.phone.phoneNumber, personalDetails.address.asText, personalDetails.canWeWrite))
     )
   )
 

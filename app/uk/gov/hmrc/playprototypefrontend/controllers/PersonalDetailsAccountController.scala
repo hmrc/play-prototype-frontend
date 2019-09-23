@@ -20,7 +20,6 @@ import javax.inject.{Inject, Singleton}
 import play.api.libs.json._
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import uk.gov.hmrc.playprototypefrontend.config.AppConfig
 import uk.gov.hmrc.playprototypefrontend.model.{PersonalDetails, addressForm, contactForm, nameForm, personalDetailsForm, personalDetailsFormat, phoneForm}
 import uk.gov.hmrc.playprototypefrontend.views.html._
 
@@ -38,24 +37,18 @@ class PersonalDetailsAccountController @Inject()(
                                                   personalDetailsConfirm: PersonalDetailsAccountConfirmation,
                                                   clearView: Clear,
                                                   clearSuccessView: ClearSuccess,
-                                                  appConfig: AppConfig,
                                                   mcc: MessagesControllerComponents
                                                 ) extends FrontendController(mcc) {
 
-  implicit val config: AppConfig = appConfig
-
   val startPage: Action[AnyContent] = Action.async { implicit request =>
-
     Future.successful(Ok(personalDetailsStart()))
   }
 
   val namePage: Action[AnyContent] = Action.async { implicit request =>
-
     Future.successful(Ok(nameView(personalDetailsForm.fill(personalDetailsInSession))))
   }
 
   val acceptName: Action[AnyContent] = Action.async { implicit request =>
-
     nameForm.bindFromRequest.fold(
       formWithErrors => {
         Future.successful(BadRequest(nameView(formWithErrors)))
@@ -68,12 +61,10 @@ class PersonalDetailsAccountController @Inject()(
   }
 
   val phonePage: Action[AnyContent] = Action.async { implicit request =>
-
     Future.successful(Ok(phoneView(personalDetailsForm.fill(personalDetailsInSession))))
   }
 
   val acceptPhone: Action[AnyContent] = Action.async { implicit request =>
-
     phoneForm.bindFromRequest.fold(
       formWithErrors => {
         Future.successful(BadRequest(phoneView(formWithErrors)))
@@ -86,12 +77,10 @@ class PersonalDetailsAccountController @Inject()(
   }
 
   val addressPage: Action[AnyContent] = Action.async { implicit request =>
-
     Future.successful(Ok(addressView(personalDetailsForm.fill(personalDetailsInSession))))
   }
 
   val acceptAddress: Action[AnyContent] = Action.async { implicit request =>
-
     addressForm.bindFromRequest.fold(
       formWithErrors => {
         Future.successful(BadRequest(addressView(formWithErrors)))
@@ -104,12 +93,10 @@ class PersonalDetailsAccountController @Inject()(
   }
 
   val contactPage: Action[AnyContent] = Action.async { implicit request =>
-
     Future.successful(Ok(contactView(personalDetailsForm.fill(personalDetailsInSession))))
   }
 
   val acceptContact: Action[AnyContent] = Action.async { implicit request =>
-
     contactForm.bindFromRequest.fold(
       formWithErrors => {
         Future.successful(BadRequest(contactView(formWithErrors)))
@@ -122,25 +109,24 @@ class PersonalDetailsAccountController @Inject()(
   }
 
   val confirmPage: Action[AnyContent] = Action.async { implicit request =>
-
     Future.successful(Ok(personalDetailsConfirm()))
   }
 
   val clearPage: Action[AnyContent] = Action.async { implicit request =>
-
     Future.successful(Ok(clearView()))
   }
 
   val clearSuccessPage: Action[AnyContent] = Action.async { implicit request =>
-
     Future.successful(Ok(clearSuccessView()).withNewSession)
   }
 
-  private def personalDetailsInSession(implicit request: MessagesRequest[_]) = {
-    request.session.get("personalDetails").map(Json.parse).map(Json.fromJson[PersonalDetails]).map(_.get) getOrElse PersonalDetails()
-  }
+  private def personalDetailsInSession(implicit request: MessagesRequest[_]) =
+    request.session
+      .get("personalDetails")
+      .map(Json.parse)
+      .map(Json.fromJson[PersonalDetails])
+      .map(_.get) getOrElse PersonalDetails()
 
-  private def updatingPersonalDetails(result: PersonalDetails)(implicit request: MessagesRequest[_]) = {
+  private def updatingPersonalDetails(result: PersonalDetails)(implicit request: MessagesRequest[_]) =
     request.session + ("personalDetails" -> Json.toJson(result).toString())
-  }
 }
