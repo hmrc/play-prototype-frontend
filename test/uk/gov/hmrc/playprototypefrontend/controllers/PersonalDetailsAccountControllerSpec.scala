@@ -27,12 +27,12 @@ import uk.gov.hmrc.playprototypefrontend.views.html.PersonalDetailsAccount
 
 class PersonalDetailsAccountControllerSpec extends PlaySpec with GuiceOneAppPerSuite {
 
-  def injector: Injector       = app.injector
-  def messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
-  def messages: Messages       = messagesApi.preferred(fakeRequest)
-  private val fakeRequest      = FakeRequest("GET", "/")
+  private def applicationBuilder(): GuiceApplicationBuilder = new GuiceApplicationBuilder()
+  private def injector: Injector       = app.injector
+  private def messagesApi: MessagesApi = injector.instanceOf[MessagesApi]
+  private def messages: Messages       = messagesApi.preferred(fakeRequest)
 
-  protected def applicationBuilder(): GuiceApplicationBuilder = new GuiceApplicationBuilder()
+  private val fakeRequest      = FakeRequest("GET", "/")
 
   "PDA Controller" must {
     "respond to the start Action" in {
