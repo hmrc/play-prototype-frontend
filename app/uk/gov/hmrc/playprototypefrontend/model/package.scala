@@ -21,23 +21,7 @@ import play.api.data.Forms._
 import play.api.data.validation.Constraints._
 import play.api.libs.json.Json
 
-import scala.collection.immutable.Stream.Empty
-
 package object model {
-
-  case class Name(name: String)
-
-  case class PhoneNumber(phoneNumber: String)
-
-  case class Address(lines: Seq[String] = Empty) {
-
-    def asText = lines mkString ("\r\n")
-  }
-
-  case class PersonalDetails(name: Name = Name(""),
-                             phone: PhoneNumber = PhoneNumber(""),
-                             address: Address = Address(),
-                             canWeWrite: Option[String] = None)
 
   implicit val optionStringFormat = play.api.libs.json.Format.optionWithNull[String]
 
@@ -53,10 +37,9 @@ package object model {
     mapping(
       "name" -> text.verifying(pattern(regex = """\D+""".r, error = "name.inputInvalid", name = ""))
     )(
-      a => PersonalDetails(name = Name(a))
+      a => model.PersonalDetails(name = Name(a))
     )(
-      personalDetails =>
-        Some(personalDetails.name.name)
+      personalDetails => Some(personalDetails.name.name)
     )
   )
 
@@ -64,10 +47,9 @@ package object model {
     mapping(
       "phone-number" -> text.verifying(pattern(regex = """07\d{9}""".r, error = "phone.inputInvalid", name = ""))
     )(
-      a => PersonalDetails(phone = PhoneNumber(a))
+      a => model.PersonalDetails(phone = PhoneNumber(a))
     )(
-      personalDetails =>
-        Some(personalDetails.phone.phoneNumber)
+      personalDetails => Some(personalDetails.phone.phoneNumber)
     )
   )
 
@@ -75,21 +57,21 @@ package object model {
     mapping(
       "address" -> text.verifying(pattern(regex = """\w(\w|,|\s)*""".r, error = "address.inputInvalid", name = ""))
     )(
-      a => PersonalDetails(address = Address(a.split("\r\n")))
+      a => model.PersonalDetails(address = Address(a.split("\r\n")))
     )(
-      personalDetails =>
-        Some(personalDetails.address.asText)
+      personalDetails => Some(personalDetails.address.asText)
     )
   )
 
   val contactForm = Form[PersonalDetails](
     mapping(
-      "canWeWrite" -> optional(text).verifying("contact.inputInvalid",
-        canWeWrite => canWeWrite match {
-          case None => false
-          case Some(_) => true
-        }
-      )
+      "canWeWrite" -> optional(text).verifying(
+        "contact.inputInvalid",
+        canWeWrite =>
+          canWeWrite match {
+            case None    => false
+            case Some(_) => true
+        })
     )(
       a => PersonalDetails(canWeWrite = a)
     )(
@@ -99,15 +81,20 @@ package object model {
 
   val personalDetailsForm = Form[PersonalDetails](
     mapping(
-      "name" -> text.verifying(pattern(regex = """\D+""".r, error = "name.inputInvalid", name = "")),
+      "name"         -> text.verifying(pattern(regex = """\D+""".r, error = "name.inputInvalid", name = "")),
       "phone-number" -> text.verifying(pattern(regex = """\d+""".r, error = "phone.inputInvalid", name = "")),
-      "address" -> text.verifying(pattern(regex = """(\w|\s)+""".r, error = "address.inputInvalid", name = "")),
-      "canWeWrite" -> optional(text)
+      "address"      -> text.verifying(pattern(regex = """(\w|\s)+""".r, error = "address.inputInvalid", name = "")),
+      "canWeWrite"   -> optional(text)
     )(
-      (a, b, c, d) => PersonalDetails(Name(a), PhoneNumber(b), Address(c.split("\r\n")), d)
+      (a, b, c, d) => model.PersonalDetails(Name(a), PhoneNumber(b), Address(c.split("\r\n")), d)
     )(
       personalDetails =>
-        Some((personalDetails.name.name, personalDetails.phone.phoneNumber, personalDetails.address.asText, personalDetails.canWeWrite))
+        Some(
+          (
+            personalDetails.name.name,
+            personalDetails.phone.phoneNumber,
+            personalDetails.address.asText,
+            personalDetails.canWeWrite))
     )
   )
 
