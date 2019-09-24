@@ -19,6 +19,7 @@
 @import uk.gov.hmrc.playprototypefrontend.controllers.routes._
 @import uk.gov.hmrc.playprototypefrontend.model._
 @import uk.gov.hmrc.playprototypefrontend.views.ViewUtils._
+@import uk.gov.hmrc.playprototypefrontend.views._
 
 @this(layout: Layout,
         form: FormWithCSRF,
@@ -34,7 +35,7 @@
     @form(action = PersonalDetailsAccountController.acceptPhone()) {
 
         @if(personalDetails.hasErrors) {
-            @errorSummary(mapErrorSummary(personalDetails.errors))(title = Text(messages("site.errorsExist")))()
+            @errorSummary(personalDetails.errors.asErrorLinks)(title = Text(messages("site.errorsExist")))()
         }
 
         <header class="hmrc-page-heading">
@@ -47,7 +48,7 @@
             name = "phone-number",
             value = Some(personalDetails.value.getOrElse(PersonalDetails()).phone.phoneNumber),
             labelParams = LabelParams(content = Text(messages("phone.input"))),
-            errorMessageParams = mapErrorMessage(personalDetails.errors.filter(error => error.key == "phone-number"), messageSelector = "phone.inputInvalid"))
+            errorMessageParams = personalDetails.errors.filter(error => error.key == "phone-number").asErrorMessage(messageSelector = "phone.inputInvalid"))
 
         @submit()(content = Text(messages("site.saveAndContinue")))
     }

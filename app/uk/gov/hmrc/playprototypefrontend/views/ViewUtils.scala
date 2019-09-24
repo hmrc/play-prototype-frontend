@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.playprototypefrontend.views
 
-import play.api.data.{Form, FormError}
+import play.api.data.Form
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.html.components._
 import uk.gov.hmrc.playprototypefrontend.controllers.routes._
@@ -28,17 +28,6 @@ object ViewUtils {
     if (form.hasErrors || form.hasGlobalErrors)
       messages("error.browser.title.prefix")
     else ""
-
-  def mapErrorSummary(errors: Seq[FormError])(implicit messages: Messages): Seq[ErrorLink] =
-    errors.map { error =>
-      ErrorLink(href = Some(s"#${error.key}"), content = HtmlContent(messages(error.message, error.args: _*)))
-    }
-
-  def mapErrorMessage(errors: Seq[FormError], messageSelector: String)(
-    implicit messages: Messages): Option[ErrorMessageParams] =
-    errors
-      .find(_.message == messageSelector)
-      .map(error => ErrorMessageParams(content = Text(error.format)))
 
   def mapRadioItems(options: Seq[String], form: Form[PersonalDetails])(implicit messages: Messages): Seq[RadioItem] =
     options.map { option =>
