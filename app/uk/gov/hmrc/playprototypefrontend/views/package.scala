@@ -26,7 +26,7 @@ package object views {
 
     def asErrorLinks: Seq[ErrorLink] =
       formErrors.map { error =>
-        ErrorLink(href = Some(s"#${error.key}"), content = HtmlContent(messages(error.message, error.args: _*)))
+        ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args: _*)))
       }
 
     def asErrorMessages: Seq[ErrorMessageParams] =

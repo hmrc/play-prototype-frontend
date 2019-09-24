@@ -19,7 +19,7 @@ package uk.gov.hmrc.playprototypefrontend.views
 import org.scalatest.{Matchers, WordSpec}
 import play.api.data._
 import play.api.i18n.{DefaultMessagesApi, Messages}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.common.{HtmlContent, Text}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.common.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.errormessage.ErrorMessageParams
 import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorLink
 
@@ -39,8 +39,8 @@ class RichFormErrorsSpec extends WordSpec with Matchers {
 
       errors.asErrorLinks should contain theSameElementsAs (
         Seq(
-          ErrorLink(href = Some("#field1"), content  = HtmlContent("Invalid input received")),
-          ErrorLink(href = Some(s"#field2"), content = HtmlContent("Input missing"))
+          ErrorLink(href = Some("#field1"), content  = Text("Invalid input received")),
+          ErrorLink(href = Some(s"#field2"), content = Text("Input missing"))
         )
       )
     }
