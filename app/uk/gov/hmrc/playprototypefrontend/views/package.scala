@@ -22,14 +22,14 @@ import uk.gov.hmrc.govukfrontend.views.html.components.{ErrorLink, ErrorMessageP
 
 package object views {
 
-  implicit class RichError(formErrors: Seq[FormError])(implicit messages: Messages) {
+  implicit class RichFormErrors(formErrors: Seq[FormError])(implicit messages: Messages) {
 
     def asErrorLinks: Seq[ErrorLink] =
       formErrors.map { error =>
         ErrorLink(href = Some(s"#${error.key}"), content = HtmlContent(messages(error.message, error.args: _*)))
       }
 
-    def asErrorMessage: Seq[ErrorMessageParams] =
+    def asErrorMessages: Seq[ErrorMessageParams] =
       formErrors
         .map(error => ErrorMessageParams(content = Text(error.format)))
 

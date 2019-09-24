@@ -23,7 +23,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.common.{HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.errormessage.ErrorMessageParams
 import uk.gov.hmrc.govukfrontend.views.viewmodels.errorsummary.ErrorLink
 
-class RichErrorSpec extends WordSpec with Matchers {
+class RichFormErrorsSpec extends WordSpec with Matchers {
 
   val messagesApi = new DefaultMessagesApi(
     messages = Map("default" -> Map("error.invalid" -> "Invalid input received", "error.missing" -> "Input missing")))
@@ -47,7 +47,7 @@ class RichErrorSpec extends WordSpec with Matchers {
 
     "be transformed to error messages" in {
 
-      errors.asErrorMessage should contain theSameElementsAs (
+      errors.asErrorMessages should contain theSameElementsAs (
         Seq(
           ErrorMessageParams(content = Text("Invalid input received")),
           ErrorMessageParams(content = Text("Input missing"))
