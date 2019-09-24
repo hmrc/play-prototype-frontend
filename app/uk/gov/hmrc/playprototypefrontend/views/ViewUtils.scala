@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.playprototypefrontend.views
 
-import play.api.data.{Field, Form, FormError}
+import play.api.data.{Form, FormError}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.html.components._
 import uk.gov.hmrc.playprototypefrontend.controllers.routes._
@@ -31,42 +31,64 @@ object ViewUtils {
 
   def mapErrorSummary(errors: Seq[FormError])(implicit messages: Messages): Seq[ErrorLink] =
     errors.map { error =>
-      ErrorLink(href = Some(s"#${error.key}"),
-        content = HtmlContent(messages(error.message, error.args: _*)))
+      ErrorLink(href = Some(s"#${error.key}"), content = HtmlContent(messages(error.message, error.args: _*)))
     }
 
-  def mapErrorMessage(errors: Seq[FormError], messageSelector: String)(implicit messages: Messages): Option[ErrorMessageParams] =
-    errors.find(_.message == messageSelector)
-      .map(error =>
-        ErrorMessageParams(content = Text(error.format)))
+  def mapErrorMessage(errors: Seq[FormError], messageSelector: String)(
+    implicit messages: Messages): Option[ErrorMessageParams] =
+    errors
+      .find(_.message == messageSelector)
+      .map(error => ErrorMessageParams(content = Text(error.format)))
 
   def mapRadioItems(options: Seq[String], form: Form[PersonalDetails])(implicit messages: Messages): Seq[RadioItem] =
     options.map { option =>
-      RadioItem(content = Text(option), id = Some(option), value = Some(option), checked = form.value.getOrElse(PersonalDetails()).canWeWrite == Some(option))
+      RadioItem(
+        content = Text(option),
+        id      = Some(option),
+        value   = Some(option),
+        checked = form.value.getOrElse(PersonalDetails()).canWeWrite == Some(option))
     }
 
   def mapNameToSummary(pda: PersonalDetails): SummaryListRow =
-    SummaryListRow(key = Key(Text("Name")),
+    SummaryListRow(
+      key   = Key(Text("Name")),
       value = Value(Text(s"${pda.name.name}")),
-      actions = Some(Actions(items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.namePage()}", content = Text("Change"))))))
+      actions = Some(
+        Actions(
+          items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.namePage()}", content = Text("Change")))))
+    )
 
   def mapPhoneToSummary(pda: PersonalDetails): SummaryListRow =
-    SummaryListRow(key = Key(Text("Phone number")),
+    SummaryListRow(
+      key   = Key(Text("Phone number")),
       value = Value(Text(s"${pda.phone.phoneNumber}")),
-      actions = Some(Actions(items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.phonePage()}", content = Text("Change"))))))
+      actions = Some(
+        Actions(
+          items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.phonePage()}", content = Text("Change")))))
+    )
 
   def mapAddressToSummary(pda: PersonalDetails): SummaryListRow =
-    SummaryListRow(key = Key(Text("Address")),
+    SummaryListRow(
+      key   = Key(Text("Address")),
       value = Value(Text(s"${pda.address.asText}")),
-      actions = Some(Actions(items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.addressPage()}", content = Text("Change"))))))
+      actions = Some(Actions(
+        items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.addressPage()}", content = Text("Change")))))
+    )
 
   def mapContactPrefToSummary(pda: PersonalDetails): SummaryListRow =
-    SummaryListRow(key = Key(Text("Can we write to you?")),
+    SummaryListRow(
+      key   = Key(Text("Can we write to you?")),
       value = Value(Text(s"${pda.canWeWrite.get}")),
-      actions = Some(Actions(items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.contactPage()}", content = Text("Change"))))))
+      actions = Some(Actions(
+        items = Seq(ActionItem(href = s"${PersonalDetailsAccountController.contactPage()}", content = Text("Change")))))
+    )
 
   def mapPersonalDetailsToSummary(form: Form[PersonalDetails])(implicit messages: Messages): Seq[SummaryListRow] = {
     val details = form.value.getOrElse(PersonalDetails())
-    Seq(mapNameToSummary(details), mapPhoneToSummary(details), mapAddressToSummary(details), mapContactPrefToSummary(details))
+    Seq(
+      mapNameToSummary(details),
+      mapPhoneToSummary(details),
+      mapAddressToSummary(details),
+      mapContactPrefToSummary(details))
   }
 }
