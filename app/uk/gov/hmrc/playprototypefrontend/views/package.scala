@@ -18,7 +18,7 @@ package uk.gov.hmrc.playprototypefrontend
 
 import play.api.data.FormError
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.html.components.{ErrorLink, ErrorMessageParams, HtmlContent, Text}
+import uk.gov.hmrc.govukfrontend.views.html.components.{ErrorLink, ErrorMessageParams, Text}
 
 package object views {
 
@@ -26,7 +26,7 @@ package object views {
 
     def asErrorLinks: Seq[ErrorLink] =
       formErrors.map { error =>
-        ErrorLink(href = Some(s"#${error.key}"), content = Text(messages(error.message, error.args: _*)))
+        ErrorLink(href = Some(s"#${error.key}"), content = Text(error.format))
       }
 
     def asErrorMessages: Seq[ErrorMessageParams] =
